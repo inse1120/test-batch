@@ -22,7 +22,6 @@ public class BatchConfiguration {
 	// tag::readerwriterprocessor[]
 	@Bean
 	public FlatFileItemReader<Person> reader() {
-		System.out.println("***** Test FlatFileItemReader! *****");
 		return new FlatFileItemReaderBuilder<Person>()
 			.name("personItemReader")
 			.resource(new ClassPathResource("sample-data.csv"))
