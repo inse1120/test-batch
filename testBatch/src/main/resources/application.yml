@@ -1,0 +1,51 @@
+#Spring 전역 환경 설정
+spring:
+  profiles:
+    active: local
+  application:
+    name: springbatch-api
+  main:
+    allow-bean-definition-overriding: true
+  #Batch 명이 없을 경우 배치명 지정
+  batch:
+    job:
+      names: ${job.name:NONE}
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    name: ${spring.application.name}
+mybatis:  
+  config-location: classpath:mybatis/mybatis-config.xml  
+  mapper-locations: classpath*:mapper/**/*.sql  
+  executorType: BATCH
+---
+#local 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: local
+#데이터베이스 연결
+  datasource:
+    primary:
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:orcl
+      username: inse
+      password: 1120
+
+  #Spring batch가 사용하는 Schema생성 방식 설정
+  #never:미생성, always:매번생성, embedded:테스트용 메모리 DB용
+  batch:
+    jdbc:
+      initialize-schema: never
+
+---
+#dev 환경 설정
+
+---
+#qa 환경 설정
+
+---
+#stg환경 설정
+
+---
+#prd 환경 설정
