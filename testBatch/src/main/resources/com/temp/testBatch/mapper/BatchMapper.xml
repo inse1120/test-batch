@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="TestBatchMapper">
+	<select id="selectTemp" resultType="com.temp.testBatch.job.TempData">
+		SELECT		NVL(MAX(TEMP_NO), 0) + 1 AS tempNo, TO_CHAR(NVL(MAX(TEMP_NO), 0) + 1) || '_TEST' AS tempNm
+		FROM 		T_TEMP
+	</select>
+
     <insert id="insertTemp">
         INSERT INTO T_TEMP
 	            (   TEMP_NO
