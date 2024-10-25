@@ -24,7 +24,7 @@
 		WHERE 		TEMP_STATUS		= 'I'
 	</select>
 	
-	<update id="updateSecondaryEnd">
+	<update id="updateSecondaryEnd" parameterType="com.temp.testBatch.job.TempData">
 		UPDATE		SECONDARY_TEMP
 		SET			TEMP_STATUS 	= 'Y'
 				  , END_DTTM 		= SYSDATE

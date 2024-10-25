@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.HashMap;
 
  @Slf4j
  @Configuration
@@ -75,33 +76,33 @@ import java.util.Map;
         return job;
     }
  	
-//	@Bean
-// 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<Map<String, Object>> reader, MyBatisBatchItemWriter<Map<String, Object>> writer){
-//        Step step = new StepBuilder("testStep",jobRepository)
-//        	.<TempData, TempData> chunk(1, transactionManager)
-//    		.reader(reader)
-//    		.writer(writer)
-//            .build();
-//        return step;
-//    }
-//	
-//	@Bean
-// 	@StepScope
-// 	public MyBatisCursorItemReader<Map<String, Object>> reader() { 		
-// 		return new MyBatisCursorItemReaderBuilder<Map<String, Object>>()
-// 			.sqlSessionFactory(sqlSessionFactory)
-// 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
-// 			.build(); 			
-// 	}
-//	 	
-// 	@Bean
-// 	@StepScope
-// 	public MyBatisBatchItemWriter<Map<String, Object>> writer() {   
-// 		return new MyBatisBatchItemWriterBuilder<Map<String, Object>>()
-// 			.sqlSessionFactory(sqlSessionFactory)
-// 			.statementId("com.temp.testBatch.service.PrimaryMapper.insertPrimary")
-// 			.build();
-// 	}
+	@Bean
+ 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writer){
+        Step step = new StepBuilder("testStep",jobRepository)
+        	.<TempData, TempData> chunk(1, transactionManager)
+    		.reader(reader)
+    		.writer(writer)
+            .build();
+        return step;
+    }
+	
+	@Bean
+ 	@StepScope
+ 	public MyBatisCursorItemReader<TempData> reader() {		
+ 		return new MyBatisCursorItemReaderBuilder<TempData>()
+ 			.sqlSessionFactory(sqlSessionFactory)
+ 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
+ 			.build(); 			
+ 	}
+	 	
+ 	@Bean
+ 	@StepScope
+ 	public MyBatisBatchItemWriter<TempData> writer() {  
+ 		return new MyBatisBatchItemWriterBuilder<TempData>()
+ 			.sqlSessionFactory(sqlSessionFactory)
+ 			.statementId("com.temp.testBatch.service.SecondaryMapper.updateSecondaryEnd")
+ 			.build();
+ 	}
  	
 // 	@Bean
 // 	public Step endStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisBatchItemWriter<TempData> writerEnd){
