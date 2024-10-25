@@ -3,7 +3,7 @@ spring:
   profiles:
     active: local
   application:
-    name: springbatch-api
+    name: testbatch-api
   main:
     allow-bean-definition-overriding: true
   #Batch 명이 없을 경우 배치명 지정
@@ -27,6 +27,11 @@ spring:
 #데이터베이스 연결
   datasource:
     primary:
+      driver-class-name: oracle.jdbc.OracleDriver
+      jdbc-url: jdbc:oracle:thin:@localhost:1521:orcl
+      username: inse
+      password: 1120
+    secondary:
       driver-class-name: oracle.jdbc.OracleDriver
       jdbc-url: jdbc:oracle:thin:@localhost:1521:orcl
       username: inse
