@@ -12,6 +12,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,6 +22,8 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
  @Slf4j
  @Configuration
  @RequiredArgsConstructor
@@ -28,53 +31,16 @@ import lombok.extern.slf4j.Slf4j;
 	 
 	private final SqlSessionFactory sqlSessionFactory;
  		
-	@Bean
- 	public Job testJob(JobRepository jobRepository, Step testStep){
-        Job job = new JobBuilder("testBatchJob",jobRepository)
-                .start(testStep)
-                .build();
-        return job;
-    }
- 	
-	@Bean
- 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writer){
-        Step step = new StepBuilder("testStep",jobRepository)
-        	.<TempData, TempData> chunk(1, transactionManager)
-    		.reader(reader)
-    		.writer(writer)
-            .build();
-        return step;
-    }
-	
-	@Bean
- 	@StepScope
- 	public MyBatisCursorItemReader<TempData> reader() { 		
- 		return new MyBatisCursorItemReaderBuilder<TempData>()
- 			.sqlSessionFactory(sqlSessionFactory)
- 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectTemp")
- 			.build(); 			
- 	}
-	 	
- 	@Bean
- 	@StepScope
- 	public MyBatisBatchItemWriter<TempData> writer() {   
- 		return new MyBatisBatchItemWriterBuilder<TempData>()
- 			.sqlSessionFactory(sqlSessionFactory)
- 			.statementId("com.temp.testBatch.service.PrimaryMapper.insertTemp")
- 			.build();
- 	}
- 	
 //	@Bean
-// 	public Job testJob(JobRepository jobRepository, Step testStep, Step endStep){
-//        Job job = new JobBuilder("batchJob",jobRepository)
+// 	public Job testJob(JobRepository jobRepository, Step testStep){
+//        Job job = new JobBuilder("testBatchJob",jobRepository)
 //                .start(testStep)
-//                .next(endStep)
 //                .build();
 //        return job;
 //    }
 // 	
 //	@Bean
-// 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisPagingItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writer){
+// 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writer){
 //        Step step = new StepBuilder("testStep",jobRepository)
 //        	.<TempData, TempData> chunk(1, transactionManager)
 //    		.reader(reader)
@@ -88,7 +54,7 @@ import lombok.extern.slf4j.Slf4j;
 // 	public MyBatisCursorItemReader<TempData> reader() { 		
 // 		return new MyBatisCursorItemReaderBuilder<TempData>()
 // 			.sqlSessionFactory(sqlSessionFactory)
-// 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
+// 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectTemp")
 // 			.build(); 			
 // 	}
 //	 	
@@ -96,6 +62,42 @@ import lombok.extern.slf4j.Slf4j;
 // 	@StepScope
 // 	public MyBatisBatchItemWriter<TempData> writer() {   
 // 		return new MyBatisBatchItemWriterBuilder<TempData>()
+// 			.sqlSessionFactory(sqlSessionFactory)
+// 			.statementId("com.temp.testBatch.service.PrimaryMapper.insertTemp")
+// 			.build();
+// 	}
+ 	
+	@Bean
+ 	public Job testJob(JobRepository jobRepository, Step testStep, Step endStep){
+        Job job = new JobBuilder("batchJob",jobRepository)
+                .start(testStep)
+                .build();
+        return job;
+    }
+ 	
+//	@Bean
+// 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<Map<String, Object>> reader, MyBatisBatchItemWriter<Map<String, Object>> writer){
+//        Step step = new StepBuilder("testStep",jobRepository)
+//        	.<TempData, TempData> chunk(1, transactionManager)
+//    		.reader(reader)
+//    		.writer(writer)
+//            .build();
+//        return step;
+//    }
+//	
+//	@Bean
+// 	@StepScope
+// 	public MyBatisCursorItemReader<Map<String, Object>> reader() { 		
+// 		return new MyBatisCursorItemReaderBuilder<Map<String, Object>>()
+// 			.sqlSessionFactory(sqlSessionFactory)
+// 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
+// 			.build(); 			
+// 	}
+//	 	
+// 	@Bean
+// 	@StepScope
+// 	public MyBatisBatchItemWriter<Map<String, Object>> writer() {   
+// 		return new MyBatisBatchItemWriterBuilder<Map<String, Object>>()
 // 			.sqlSessionFactory(sqlSessionFactory)
 // 			.statementId("com.temp.testBatch.service.PrimaryMapper.insertPrimary")
 // 			.build();
