@@ -8,4 +8,5 @@ import lombok.Setter;
 public class TempData {
     private String tempNo;
     private String tempNm;
+    private String tempDttm;
 }

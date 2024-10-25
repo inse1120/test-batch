@@ -3,7 +3,31 @@
 
 <mapper namespace="com.temp.testBatch.service.SecondaryMapper">
 	<select id="selectTemp" resultType="com.temp.testBatch.job.TempData">
-		SELECT		NVL(MAX(TEMP_NO), 0) + 1 AS tempNo, TO_CHAR(NVL(MAX(TEMP_NO), 0) + 1) || '_TEST' AS tempNm
+		SELECT		NVL(MAX(TEMP_NO), 0) + 1 AS tempNo
+				  , TO_CHAR(NVL(MAX(TEMP_NO), 0) + 1) || '_TEST' AS tempNm
+				  , TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') AS tempDttm
 		FROM 		T_TEMP
 	</select>
+	
+	<update id="updateSecondaryStart">
+		UPDATE		SECONDARY_TEMP
+		SET			TEMP_STATUS 	= 'R'
+				  , START_DTTM 		= SYSDATE
+		WHERE		TEMP_STATUS 	= 'I'
+	</update>
+	
+	<select id="selectSecondary" resultType="map">
+		SELECT		TEMP_NO AS tempNo
+				  , TEMP_NM AS tempNm
+				  , TO_CHAR(TEMP_DTTM, 'YYYYMMDDHH24MISS') AS tempDttm
+		FROM 		SECONDARY_TEMP
+		WHERE 		TEMP_STATUS		= 'I'
+	</select>
+	
+	<update id="updateSecondaryEnd">
+		UPDATE		SECONDARY_TEMP
+		SET			TEMP_STATUS 	= 'Y'
+				  , END_DTTM 		= SYSDATE
+		WHERE		TEMP_NO 		= #{tempNo}
+	</update>
 </mapper>

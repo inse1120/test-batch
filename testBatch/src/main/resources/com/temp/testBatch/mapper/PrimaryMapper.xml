@@ -13,4 +13,18 @@
 	    		  , SYSDATE
 	    		)
     </insert>
+    
+    <insert id="insertPrimary" parameterType="com.temp.testBatch.job.TempData">
+    	INSERT INTO PRIMARY_TEMP
+    			(	TEMP_NO
+    			  , TEMP_NM
+    			  , TEMP_DTTM
+    			  , REG_DTTM
+    			)
+    	VALUES	(	#{tempNo}
+    			  , #{tempNm}
+    			  , TO_DATE(#{tempDttm}, 'YYYYMMDDHH24MISS')
+    			  , SYSDATE
+    			)
+    </insert>
 </mapper>
