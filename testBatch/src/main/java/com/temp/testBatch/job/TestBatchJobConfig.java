@@ -68,10 +68,47 @@ import java.util.HashMap;
 // 			.build();
 // 	}
  	
-	@Bean
- 	public Job testJob(JobRepository jobRepository, Step testStep, Step endStep){
+//	@Bean
+// 	public Job testJob(JobRepository jobRepository, Step testStep){
+//        Job job = new JobBuilder("batchJob",jobRepository)
+//                .start(testStep)
+//                .build();
+//        return job;
+//    }
+// 	
+//	@Bean
+// 	public Step testStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writer){
+//        Step step = new StepBuilder("testStep",jobRepository)
+//        	.<TempData, TempData> chunk(1, transactionManager)
+//    		.reader(reader)
+//    		.writer(writer)
+//            .build();
+//        return step;
+//    }
+//	
+//	@Bean
+// 	@StepScope
+// 	public MyBatisCursorItemReader<TempData> reader() {		
+// 		return new MyBatisCursorItemReaderBuilder<TempData>()
+// 			.sqlSessionFactory(sqlSessionFactory)
+// 			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
+// 			.build(); 			
+// 	}
+//	 	
+// 	@Bean
+// 	@StepScope
+// 	public MyBatisBatchItemWriter<TempData> writer() {  
+// 		return new MyBatisBatchItemWriterBuilder<TempData>()
+// 			.sqlSessionFactory(sqlSessionFactory)
+// 			.statementId("com.temp.testBatch.service.SecondaryMapper.updateSecondaryEnd")
+// 			.build();
+// 	}
+ 	
+ 	@Bean
+ 	public Job testJob(JobRepository jobRepository, Step testStep){
         Job job = new JobBuilder("batchJob",jobRepository)
                 .start(testStep)
+                //.next(endStep)
                 .build();
         return job;
     }
@@ -100,7 +137,7 @@ import java.util.HashMap;
  	public MyBatisBatchItemWriter<TempData> writer() {  
  		return new MyBatisBatchItemWriterBuilder<TempData>()
  			.sqlSessionFactory(sqlSessionFactory)
- 			.statementId("com.temp.testBatch.service.SecondaryMapper.updateSecondaryEnd")
+ 			.statementId("com.temp.testBatch.service.PrimaryMapper.insertPrimary")
  			.build();
  	}
  	

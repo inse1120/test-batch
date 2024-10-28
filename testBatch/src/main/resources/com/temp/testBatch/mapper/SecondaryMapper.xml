@@ -16,7 +16,7 @@
 		WHERE		TEMP_STATUS 	= 'I'
 	</update>
 	
-	<select id="selectSecondary" resultType="map">
+	<select id="selectSecondary" resultType="com.temp.testBatch.job.TempData">
 		SELECT		TEMP_NO AS tempNo
 				  , TEMP_NM AS tempNm
 				  , TO_CHAR(TEMP_DTTM, 'YYYYMMDDHH24MISS') AS tempDttm

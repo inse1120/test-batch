@@ -14,17 +14,43 @@
 	    		)
     </insert>
     
-    <insert id="insertPrimary" parameterType="com.temp.testBatch.job.TempData">
+    <insert id="insertPrimary_backup" parameterType="com.temp.testBatch.job.TempData">
+    	<selectKey resultType="string" keyProperty="tempId" order="BEFORE">
+        	SELECT 	NVL(MAX(TEMP_ID), 0) + 1 AS tempId
+        	FROM	PRIMARY_TEMP
+    	</selectKey>  
+    	/*selectKey오류*/
     	INSERT INTO PRIMARY_TEMP
-    			(	TEMP_NO
+    			(	TEMP_ID
+    			  , TEMP_NO
     			  , TEMP_NM
     			  , TEMP_DTTM
     			  , REG_DTTM
     			)
-    	VALUES	(	#{tempNo}
+    	VALUES	(	#{tempId}
+    			  , #{tempNo}
     			  , #{tempNm}
     			  , TO_DATE(#{tempDttm}, 'YYYYMMDDHH24MISS')
     			  , SYSDATE
     			)
     </insert>
+    
+    <insert id="insertPrimary" parameterType="com.temp.testBatch.job.TempData">
+    	INSERT INTO PRIMARY_TEMP
+    			(	TEMP_ID
+    			  , TEMP_NO
+    			  , TEMP_NM
+    			  , TEMP_DTTM
+    			  , REG_DTTM
+    			)
+    	VALUES	(	( 	SELECT 	NVL(MAX(TEMP_ID), 0) + 1
+        				FROM	PRIMARY_TEMP
+    				)
+    			  , #{tempNo}
+    			  , #{tempNm}
+    			  , TO_DATE(#{tempDttm}, 'YYYYMMDDHH24MISS')
+    			  , SYSDATE
+    			)
+    </insert>
+ 
 </mapper>
