@@ -108,7 +108,6 @@ import java.util.HashMap;
  	public Job testJob(JobRepository jobRepository, Step testStep){
         Job job = new JobBuilder("batchJob",jobRepository)
                 .start(testStep)
-                //.next(endStep)
                 .build();
         return job;
     }
@@ -125,7 +124,7 @@ import java.util.HashMap;
 	
 	@Bean
  	@StepScope
- 	public MyBatisCursorItemReader<TempData> reader() {		
+ 	public MyBatisCursorItemReader<TempData> reader() {
  		return new MyBatisCursorItemReaderBuilder<TempData>()
  			.sqlSessionFactory(sqlSessionFactory)
  			.queryId("com.temp.testBatch.service.SecondaryMapper.selectSecondary")
@@ -142,9 +141,10 @@ import java.util.HashMap;
  	}
  	
 // 	@Bean
-// 	public Step endStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisBatchItemWriter<TempData> writerEnd){
-//        Step step = new StepBuilder("endStep",jobRepository)
+// 	public Step nextStep(JobRepository jobRepository,PlatformTransactionManager transactionManager, MyBatisCursorItemReader<TempData> reader, MyBatisBatchItemWriter<TempData> writerEnd){
+//        Step step = new StepBuilder("nextStep",jobRepository)
 //        	.<TempData, TempData> chunk(1, transactionManager)
+//        	.reader(reader)
 //    		.writer(writerEnd)
 //            .build();
 //        return step;
@@ -152,7 +152,7 @@ import java.util.HashMap;
 // 	
 // 	@Bean
 // 	@StepScope
-// 	public MyBatisBatchItemWriter<TempData> writerEnd() {   
+// 	public MyBatisBatchItemWriter<TempData> writerEnd() { 
 // 		return new MyBatisBatchItemWriterBuilder<TempData>()
 // 			.sqlSessionFactory(sqlSessionFactory)
 // 			.statementId("com.temp.testBatch.service.SecondaryMapper.updateSecondaryEnd")
